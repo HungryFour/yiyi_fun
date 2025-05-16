@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>YiYi Fun - 字母学习游戏</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+        #game-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #loading {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #ffffff;
+            z-index: 100;
+        }
+        /* 强制横屏提示 */
+        @media screen and (orientation: portrait) {
+            #rotate-device {
+                display: flex;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0,0,0,0.9);
+                z-index: 1000;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+                color: white;
+                font-size: 24px;
+                text-align: center;
+                padding: 20px;
+            }
+        }
+        @media screen and (orientation: landscape) {
+            #rotate-device {
+                display: none;
+            }
+        }
+    </style>
+    <!-- Phaser 3 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
+</head>
+<body>
+    <div id="loading">加载中...</div>
+    <div id="game-container"></div>
+    <div id="rotate-device">
+        <div>请旋转设备至横屏模式</div>
+        <div style="font-size: 48px; margin: 20px;">↻</div>
+        <div>获得更好的游戏体验</div>
+    </div>
+
+    <!-- 游戏配置 -->
+    <script src="src/js/config.js"></script>
+    
+    <!-- 工具类 -->
+    <script src="src/js/utils/StorageManager.js"></script>
+    
+    <!-- 游戏对象 -->
+    <script src="src/js/objects/Character.js"></script>
+    <script src="src/js/objects/Letter.js"></script>
+    
+    <!-- 游戏场景 -->
+    <script src="src/js/scenes/BootScene.js"></script>
+    <script src="src/js/scenes/MainMenuScene.js"></script>
+    <script src="src/js/scenes/GameScene.js"></script>
+    <script src="src/js/scenes/SettingsScene.js"></script>
+    
+    <!-- 游戏主入口 -->
+    <script src="src/js/main.js"></script>
+    
+    <script>
+        window.addEventListener('load', function() {
+            document.getElementById('loading').style.display = 'none';
+        });
+    </script>
+</body>
+</html>
