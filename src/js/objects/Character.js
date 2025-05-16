@@ -8,24 +8,23 @@ class Character extends Phaser.GameObjects.Container {
      * @param {Phaser.Scene} scene - 场景引用
      * @param {number} x - 初始X坐标
      * @param {number} y - 初始Y坐标
-     * @param {string|null} avatarData - 角色头像的Base64数据（可选）
      */
-    constructor(scene, x, y, avatarData = null) {
+    constructor(scene, x, y) {
         super(scene, x, y);
         
         this.scene = scene;
         this.initialX = x;
         this.initialY = y;
         
-        // 创建角色身体部分
-        this.body = scene.add.circle(0, 0, CONFIG.character.defaultSize / 2, 0xffdde1);
-        this.add(this.body);
-
-        // 创建角色头像或默认面部
-        if (avatarData) {
-            this.createAvatarFromData(avatarData);
+        // 加载小狗图像
+        if (!scene.textures.exists('dog-image')) {
+            scene.load.image('dog-image', 'src/assets/images/dog.png');
+            scene.load.once('complete', () => {
+                this.createDogCharacter();
+            });
+            scene.load.start();
         } else {
-            this.createDefaultFace();
+            this.createDogCharacter();
         }
 
         // 添加到场景中
@@ -48,55 +47,17 @@ class Character extends Phaser.GameObjects.Container {
     }
 
     /**
-     * 从Base64数据创建头像
-     * @param {string} avatarData - Base64格式的图片数据
+     * 创建小狗角色
      */
-    createAvatarFromData(avatarData) {
-        // 如果场景中不存在这个纹理，先加载它
-        const key = 'player-avatar';
-        if (!this.scene.textures.exists(key)) {
-            this.scene.textures.addBase64(key, avatarData);
-        }
-
-        // 创建头像精灵，并调整到合适大小
-        const size = CONFIG.character.defaultSize * 0.8;
-        this.face = this.scene.add.image(0, 0, key)
-            .setDisplaySize(size, size)
-            .setCircle();
-            
+    createDogCharacter() {
+        const size = CONFIG.character.defaultSize * 1.5; // 小狗图像稍大一些
+        
+        // 创建小狗图片
+        this.dogImage = this.scene.add.image(0, 0, 'dog-image');
+        this.dogImage.setDisplaySize(size, size);
+        
         // 添加到容器
-        this.add(this.face);
-    }
-
-    /**
-     * 创建默认面部表情
-     */
-    createDefaultFace() {
-        // 创建简单的笑脸
-        const graphics = this.scene.add.graphics();
-        const size = CONFIG.character.defaultSize;
-        
-        // 眼睛
-        graphics.fillStyle(0x000000, 1);
-        graphics.fillCircle(-size * 0.15, -size * 0.1, size * 0.08);
-        graphics.fillCircle(size * 0.15, -size * 0.1, size * 0.08);
-        
-        // 嘴巴（笑脸）
-        graphics.lineStyle(3, 0x000000, 1);
-        graphics.beginPath();
-        graphics.arc(0, size * 0.1, size * 0.2, 0, Math.PI, false);
-        graphics.strokePath();
-        
-        // 将图形转换为纹理
-        const faceKey = 'default-face';
-        if (!this.scene.textures.exists(faceKey)) {
-            graphics.generateTexture(faceKey, size, size);
-        }
-        graphics.destroy();
-        
-        // 使用生成的纹理创建精灵
-        this.face = this.scene.add.image(0, 0, faceKey);
-        this.add(this.face);
+        this.add(this.dogImage);
     }
 
     /**

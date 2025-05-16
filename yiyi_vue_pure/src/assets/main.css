@@ -1,0 +1,146 @@
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700&display=swap');
+
+:root {
+  /* 主色调 - 更鲜艳儿童化 */
+  --primary-color: #FF6B6B;
+  --secondary-color: #4ECDC4;
+  --accent-color: #FFD166;
+  --text-color: #2A2D34;
+  --background-color: #F9F7F7;
+  
+  /* 功能色 */
+  --success-color: #6BCB77;
+  --error-color: #FF6B6B;
+  --warning-color: #FFD166;
+  
+  /* 圆角 */
+  --border-radius-sm: 10px;
+  --border-radius-md: 15px;
+  --border-radius-lg: 25px;
+  
+  /* 阴影 */
+  --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 6px 12px rgba(0, 0, 0, 0.15);
+  --shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Baloo 2', cursive;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  background-color: var(--background-color);
+}
+
+#app {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 卡通按钮样式 */
+.btn {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius-md);
+  padding: 12px 24px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0.2),
+    rgba(255, 255, 255, 0)
+  );
+  transform: skewX(-25deg);
+  transition: all 0.5s ease;
+}
+
+.btn:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn:hover:before {
+  left: 100%;
+}
+
+.btn:active {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+/* 次要按钮 */
+.btn-secondary {
+  background-color: var(--secondary-color);
+}
+
+/* 橙色按钮 */
+.btn-accent {
+  background-color: var(--accent-color);
+  color: var(--text-color);
+}
+
+/* 卡通卡片 */
+.card {
+  background-color: white;
+  border-radius: var(--border-radius-lg);
+  padding: 20px;
+  box-shadow: var(--shadow-md);
+}
+
+/* 容器 */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* 横屏提示 */
+@media screen and (orientation: portrait) {
+  .rotate-device {
+    display: flex;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    color: white;
+    font-size: 24px;
+    text-align: center;
+    padding: 20px;
+  }
+}
+
+@media screen and (orientation: landscape) {
+  .rotate-device {
+    display: none;
+  }
+} 

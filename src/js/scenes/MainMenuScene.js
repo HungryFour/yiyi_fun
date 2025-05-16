@@ -70,7 +70,7 @@ class MainMenuScene extends Phaser.Scene {
         // 添加游戏标题
         const titleText = this.add.text(
             width / 2,
-            height * 0.2,
+            height * 0.18, // 稍微上移标题
             'YiYi Fun',
             {
                 fontFamily: 'Arial',
@@ -85,26 +85,14 @@ class MainMenuScene extends Phaser.Scene {
         // 添加标题动画
         this.tweens.add({
             targets: titleText,
-            y: height * 0.2 - 10,
+            y: height * 0.18 - 10,
             duration: 1500,
             yoyo: true,
             repeat: -1,
             ease: 'Sine.easeInOut'
         });
         
-        // 添加副标题
-        this.add.text(
-            width / 2,
-            height * 0.2 + 60,
-            '有趣的字母学习游戏',
-            {
-                fontFamily: 'Arial',
-                fontSize: Math.min(width * 0.05, 30),
-                color: '#ffffff',
-                stroke: '#000000',
-                strokeThickness: 4
-            }
-        ).setOrigin(0.5);
+        // 移除副标题 "有趣的字母学习游戏"
     }
     
     /**
@@ -117,10 +105,10 @@ class MainMenuScene extends Phaser.Scene {
         const buttonHeight = Math.min(height * 0.1, 60);
         const buttonSpacing = height * 0.12;
         
-        // 创建开始游戏按钮
+        // 创建开始游戏按钮 - 位置上移
         this.createButton(
             width / 2,
-            height * 0.5,
+            height * 0.42,
             '开始游戏',
             buttonWidth, 
             buttonHeight,
@@ -129,10 +117,10 @@ class MainMenuScene extends Phaser.Scene {
             }
         );
         
-        // 创建设置按钮
+        // 创建设置按钮 - 位置上移
         this.createButton(
             width / 2,
-            height * 0.5 + buttonSpacing,
+            height * 0.42 + buttonSpacing,
             '设置',
             buttonWidth,
             buttonHeight,
@@ -168,7 +156,9 @@ class MainMenuScene extends Phaser.Scene {
         // 添加按钮事件
         button.on('pointerdown', () => {
             // 播放按钮点击音效
-            this.sound.play('button-click');
+            if (this.sound.get('button-click')) {
+                this.sound.play('button-click');
+            }
             
             // 缩小按钮
             this.tweens.add({
@@ -225,9 +215,22 @@ class MainMenuScene extends Phaser.Scene {
         if (playerName && playerName.length > 0) {
             // 如果已经有玩家名称，显示欢迎信息
             const welcomeText = `欢迎回来，${playerName}!`;
+            
+            // 创建角色预览 - 将位置上移，避免与欢迎文本重叠
+            const characterX = width / 2;
+            const characterY = height * 0.7; // 从0.75改为0.7
+            
+            // 创建一个简单的角色预览
+            const character = new Character(
+                this,
+                characterX,
+                characterY
+            );
+            
+            // 欢迎文本放在角色下方，避免重叠
             this.add.text(
                 width / 2,
-                height * 0.85,
+                characterY + 80, // 确保文本在角色下方
                 welcomeText,
                 {
                     fontFamily: 'Arial',
@@ -237,35 +240,38 @@ class MainMenuScene extends Phaser.Scene {
                     strokeThickness: 3
                 }
             ).setOrigin(0.5);
-            
-            // 创建角色预览
-            const characterX = width / 2;
-            const characterY = height * 0.75;
-            
-            // 创建一个简单的角色预览
-            const character = new Character(
-                this,
-                characterX,
-                characterY,
-                playerAvatar
-            );
-            character.setScale(0.8);
+        } else {
+            // 如果没有玩家名称，显示提示去设置
+            const hintText = '点击"设置"来设置你的名字!';
+            this.add.text(
+                width / 2,
+                height * 0.75,
+                hintText,
+                {
+                    fontFamily: 'Arial',
+                    fontSize: Math.min(width * 0.04, 22),
+                    color: '#ffffff',
+                    stroke: '#000000',
+                    strokeThickness: 2
+                }
+            ).setOrigin(0.5);
         }
     }
-    
+
     /**
      * 检查玩家数据
-     * 如果没有设置玩家信息，先跳转到设置页面
+     * 如果已经设置了名字，直接开始游戏
+     * 否则跳转到设置页面
      */
     checkPlayerData() {
         const playerName = this.registry.get('playerName');
         
-        if (!playerName || playerName.length === 0) {
-            // 如果没有玩家名称，先进入设置页面
-            this.scene.start('SettingsScene', { fromMainMenu: true });
-        } else {
-            // 已有玩家数据，直接开始游戏
+        if (playerName && playerName.length > 0) {
+            // 有玩家名字，直接开始游戏
             this.scene.start('GameScene');
+        } else {
+            // 没有玩家名字，先去设置
+            this.scene.start('SettingsScene', { fromMainMenu: true });
         }
     }
 }

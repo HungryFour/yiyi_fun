@@ -114,6 +114,9 @@ class BootScene extends Phaser.Scene {
      * 加载游戏图像
      */
     loadImages() {
+        // 加载小狗图片
+        this.load.image('dog-image', 'src/assets/images/dog.png');
+        
         // 创建临时字母图片（后续可以替换为设计好的字母图片）
         this.generateLetterImages();
         
@@ -184,18 +187,33 @@ class BootScene extends Phaser.Scene {
      * 加载玩家数据
      */
     loadPlayerData() {
-        // 从本地存储加载玩家数据
-        const playerName = StorageManager.getPlayerName();
-        const playerAvatar = StorageManager.getPlayerAvatar();
-        const gameSettings = StorageManager.getGameSettings();
-        
-        // 保存到全局游戏数据中
-        this.registry.set('playerName', playerName);
-        this.registry.set('playerAvatar', playerAvatar);
-        this.registry.set('gameSettings', gameSettings);
+        try {
+            // 从本地存储加载玩家数据
+            const playerName = StorageManager.getPlayerName();
+            const playerAvatar = StorageManager.getPlayerAvatar();
+            const gameSettings = StorageManager.getGameSettings();
+            
+            console.log('加载玩家数据:', { playerName, gameSettings });
+            
+            // 保存到全局游戏数据中
+            this.registry.set('playerName', playerName);
+            this.registry.set('playerAvatar', playerAvatar);
+            this.registry.set('gameSettings', gameSettings);
+            
+            // 确保设置了默认值
+            if (!this.registry.get('gameSettings')) {
+                this.registry.set('gameSettings', CONFIG.defaultSettings);
+            }
+        } catch (error) {
+            console.error('加载玩家数据出错:', error);
+            // 确保有默认设置
+            this.registry.set('gameSettings', CONFIG.defaultSettings);
+        }
     }
 
     create() {
         console.log('BootScene: 资源加载完成');
+        console.log('玩家名称:', this.registry.get('playerName'));
+        console.log('游戏设置:', this.registry.get('gameSettings'));
     }
 }

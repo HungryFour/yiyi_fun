@@ -39,7 +39,9 @@ const CONFIG = {
             { name: '简单', distractors: 0, caseSensitive: false },
             { name: '中等', distractors: 2, caseSensitive: false },
             { name: '困难', distractors: 4, caseSensitive: true }
-        ]
+        ],
+        winScore: 10,    // 胜利所需分数
+        loseScore: 5     // 失败错误次数
     },
     
     // 存储键名
@@ -51,8 +53,11 @@ const CONFIG = {
     
     // 默认设置
     defaultSettings: {
-        distractorCount: 2,
-        caseSensitive: false,
-        countdownTime: 10000 // 10秒
+        distractorCount: 2,         // 干扰字母数量
+        caseSensitive: false,       // 是否区分大小写
+        countdownTime: 10000,       // 倒计时时间(毫秒)
+        showTargetHint: true,       // 是否显示目标字母提示(底色)
+        winScore: 10,               // 胜利所需分数
+        loseScore: 5                // 失败错误次数
     }
 };
