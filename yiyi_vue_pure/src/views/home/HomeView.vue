@@ -48,6 +48,21 @@
             返回
           </button>
         </div>
+        
+        <!-- 历史玩家列表 -->
+        <div class="player-history" v-if="playerHistory.length > 0">
+          <div class="history-title">选择历史玩家：</div>
+          <div class="history-list">
+            <button 
+              v-for="(name, index) in playerHistory" 
+              :key="index" 
+              class="history-item"
+              @click="selectHistoryPlayer(name)"
+            >
+              {{ name }}
+            </button>
+          </div>
+        </div>
       </div>
       
       <div class="menu-buttons" v-else>
@@ -90,6 +105,7 @@ const gameStore = useGameStore()
 const nameInput = ref('')
 const playerName = computed(() => gameStore.playerName)
 const previousName = ref('') // 保存之前的玩家名称
+const playerHistory = computed(() => gameStore.playerHistory)
 
 onMounted(() => {
   // 初始化游戏配置
@@ -123,6 +139,19 @@ function savePlayer() {
     // 保存玩家信息，不使用头像
     gameStore.savePlayerInfo(nameInput.value.trim(), '')
   }
+}
+
+// 选择历史玩家
+function selectHistoryPlayer(name) {
+  try {
+    const audio = new Audio()
+    audio.play().catch(err => console.log('音效播放错误', err))
+  } catch (e) {
+    console.error('音效播放错误:', e)
+  }
+  
+  nameInput.value = name
+  gameStore.savePlayerInfo(name, '')
 }
 
 // 开始游戏
@@ -303,6 +332,42 @@ function returnToPlayer() {
   display: flex;
   gap: 10px;
   justify-content: space-between;
+}
+
+/* 玩家历史记录 */
+.player-history {
+  margin-top: 20px;
+  border-top: 2px dashed var(--secondary-color);
+  padding-top: 15px;
+}
+
+.history-title {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: var(--text-color);
+}
+
+.history-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.history-item {
+  padding: 8px 12px;
+  background-color: var(--secondary-color);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 1rem;
+}
+
+.history-item:hover {
+  background-color: var(--primary-color);
+  transform: translateY(-2px);
 }
 
 /* 菜单按钮 */
@@ -530,6 +595,11 @@ function returnToPlayer() {
   .btn {
     font-size: 1.3rem;
     padding: 12px 16px;
+  }
+  
+  .history-item {
+    font-size: 0.9rem;
+    padding: 6px 10px;
   }
 }
 </style> 

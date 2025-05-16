@@ -53,9 +53,15 @@
           :max-time="gameStore.gameState.maxCountdownTime"
         />
         
-        <button class="pause-button" @click="togglePause">
-          {{ gameStore.gameState.isPaused ? '继续' : '暂停' }}
-        </button>
+        <div class="game-controls">
+          <button class="control-button pause-button" @click="togglePause">
+            {{ gameStore.gameState.isPaused ? '继续' : '暂停' }}
+          </button>
+          
+          <button class="control-button back-button" @click="confirmExit">
+            返回
+          </button>
+        </div>
       </div>
     </div>
     
@@ -80,6 +86,7 @@
         <h2>准备好了吗?</h2>
         <p>点击下面的按钮开始游戏!</p>
         <button class="btn start-button" @click="startGame">开始游戏</button>
+        <button class="btn btn-secondary back-button" @click="exitGame">返回主菜单</button>
       </div>
     </div>
     
@@ -121,6 +128,18 @@
         </div>
       </div>
     </div>
+    
+    <!-- 确认退出弹窗 -->
+    <div class="game-result-overlay" v-if="showExitConfirm">
+      <div class="result-panel confirm">
+        <h2>确定要退出游戏吗?</h2>
+        <p>当前游戏进度将不会保存</p>
+        <div class="result-buttons">
+          <button class="btn" @click="showExitConfirm = false">继续游戏</button>
+          <button class="btn btn-secondary" @click="exitGame">退出游戏</button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -139,6 +158,7 @@ const gameStore = useGameStore()
 const gameStarted = ref(false)
 const showWinPanel = ref(false)
 const showLosePanel = ref(false)
+const showExitConfirm = ref(false)
 const dogMood = ref('neutral')
 const speechText = ref('')
 const lastFrameTime = ref(0)
@@ -230,6 +250,18 @@ function togglePause() {
   if (gameStore.gameState.isPaused) {
     gameStore.resumeGame()
   } else {
+    gameStore.pauseGame()
+  }
+}
+
+// 确认退出
+function confirmExit() {
+  // 如果游戏已经结束或未开始，直接退出
+  if (!gameStarted.value || showWinPanel.value || showLosePanel.value) {
+    exitGame()
+  } else {
+    // 正在游戏中，显示确认弹窗
+    showExitConfirm.value = true
     gameStore.pauseGame()
   }
 }
@@ -328,6 +360,8 @@ function playSound(sound) {
   height: 100%;
   position: relative;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 /* 游戏背景 */
@@ -431,14 +465,16 @@ function playSound(sound) {
 .game-header {
   position: relative;
   width: 100%;
-  height: 120px;
+  height: auto;
+  min-height: 120px;
   background-color: rgba(255, 255, 255, 0.8);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 20px;
+  padding: 10px 20px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   z-index: 10;
+  flex-wrap: wrap;
 }
 
 .left-section {
@@ -453,6 +489,7 @@ function playSound(sound) {
   flex-direction: column;
   align-items: center;
   position: relative;
+  padding: 10px 0;
 }
 
 .right-section {
@@ -461,6 +498,35 @@ function playSound(sound) {
   align-items: flex-end;
   gap: 10px;
   min-width: 250px;
+}
+
+.game-controls {
+  display: flex;
+  gap: 10px;
+}
+
+.control-button {
+  padding: 8px 15px;
+  border: none;
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.2s;
+}
+
+.pause-button {
+  background-color: var(--secondary-color);
+  color: white;
+}
+
+.back-button {
+  background-color: var(--accent-color);
+  color: white;
+}
+
+.control-button:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
 }
 
 /* 目标字母显示 */
@@ -498,249 +564,237 @@ function playSound(sound) {
 
 .speak-button:hover {
   opacity: 1;
-  transform: scale(1.1);
 }
 
-.encouragement {
-  position: absolute;
-  bottom: -40px;
-  left: 0;
-  width: 100%;
-  text-align: center;
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: var(--success-color);
-  animation: pop-in 0.5s;
-  text-shadow: 1px 1px 0 white;
-}
-
-/* 得分区域 */
-.score-container {
-  display: flex;
-  gap: 15px;
-  margin-bottom: 5px;
-}
-
-.score-item {
-  display: flex;
-  align-items: center;
-}
-
-.score-label {
-  font-size: 1rem;
-  color: var(--text-color);
-}
-
-.score-value {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: var(--success-color);
-  min-width: 30px;
-  text-align: center;
-}
-
-.score-value.error {
-  color: var(--error-color);
-}
-
-/* 暂停按钮 */
-.pause-button {
-  background-color: var(--accent-color);
-  border: none;
-  border-radius: var(--border-radius-sm);
-  padding: 8px 15px;
-  color: var(--text-color);
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.pause-button:hover {
-  background-color: var(--warning-color);
-  transform: translateY(-2px);
-}
-
-/* 游戏区域 */
-.game-area {
-  position: relative;
-  width: 100%;
-  height: calc(100% - 120px);
-  overflow: hidden;
-  z-index: 1;
-}
-
-/* 游戏开始遮罩 */
-.game-start-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.7);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 100;
-}
-
-.start-panel {
-  background-color: white;
-  border-radius: var(--border-radius-lg);
-  padding: 30px;
-  text-align: center;
-  width: 90%;
-  max-width: 400px;
-  animation: drop-in 0.5s;
-}
-
-.start-panel h2 {
-  font-size: 2rem;
-  color: var(--primary-color);
-  margin-bottom: 15px;
-}
-
-.start-panel p {
-  font-size: 1.2rem;
-  margin-bottom: 25px;
-  color: var(--text-color);
-}
-
-.start-button {
-  font-size: 1.5rem;
-  padding: 15px 30px;
-}
-
-/* 游戏暂停遮罩 */
-.game-pause-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.7);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 100;
-}
-
-.pause-panel {
-  background-color: white;
-  border-radius: var(--border-radius-lg);
-  padding: 30px;
-  text-align: center;
-  width: 90%;
-  max-width: 400px;
-  animation: drop-in 0.5s;
-}
-
-.pause-panel h2 {
-  font-size: 2rem;
-  color: var(--text-color);
-  margin-bottom: 25px;
-}
-
-.pause-buttons {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-/* 游戏结果遮罩 */
-.game-result-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.7);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 100;
-}
-
-.result-panel {
-  background-color: white;
-  border-radius: var(--border-radius-lg);
-  padding: 40px;
-  text-align: center;
-  width: 90%;
-  max-width: 400px;
-  animation: zoom-in 0.5s;
-}
-
-.result-panel.win {
-  border: 8px solid var(--success-color);
-}
-
-.result-panel.lose {
-  border: 8px solid var(--error-color);
-}
-
-.result-icon {
-  font-size: 5rem;
-  margin-bottom: 20px;
-}
-
-.result-panel h2 {
-  font-size: 2.5rem;
-  margin-bottom: 15px;
-}
-
-.result-panel p {
-  font-size: 1.3rem;
-  margin-bottom: 10px;
-  color: var(--text-color);
-}
-
-.result-panel p:last-of-type {
-  font-weight: bold;
-  font-size: 1.5rem;
-  margin-bottom: 30px;
-}
-
-.result-buttons {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-/* 动画 */
-@keyframes sunshine {
+@keyframes pulse {
   0% { transform: scale(1); }
   50% { transform: scale(1.1); }
   100% { transform: scale(1); }
 }
 
-@keyframes cloud-move-1 {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(calc(100vw + 200px)); }
+/* 鼓励信息 */
+.encouragement {
+  position: absolute;
+  bottom: -30px;
+  background-color: rgba(255, 255, 255, 0.9);
+  color: var(--accent-color);
+  font-weight: bold;
+  padding: 5px 15px;
+  border-radius: 20px;
+  z-index: 10;
+  animation: fadeInUp 0.3s;
 }
 
-@keyframes cloud-move-2 {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(calc(-100vw - 200px)); }
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.05); }
+/* 分数显示 */
+.score-container {
+  background-color: white;
+  border-radius: var(--border-radius-md);
+  padding: 10px 15px;
+  margin-bottom: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-@keyframes pop-in {
-  0% { transform: scale(0); opacity: 0; }
-  70% { transform: scale(1.1); }
-  100% { transform: scale(1); opacity: 1; }
+.score-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 5px;
 }
 
-@keyframes drop-in {
-  0% { transform: translateY(-100px); opacity: 0; }
-  100% { transform: translateY(0); opacity: 1; }
+.score-item:last-child {
+  margin-bottom: 0;
 }
 
-@keyframes zoom-in {
-  0% { transform: scale(0.7); opacity: 0; }
-  100% { transform: scale(1); opacity: 1; }
+.score-label {
+  color: var(--text-color);
+  font-weight: 500;
+}
+
+.score-value {
+  font-weight: bold;
+  color: var(--primary-color);
+}
+
+.score-value.error {
+  color: var(--danger-color);
+}
+
+/* 游戏区域 */
+.game-area {
+  position: relative;
+  flex-grow: 1;
+  width: 100%;
+  z-index: 5;
+  padding-top: 20px; /* 确保与顶部导航栏有足够间距 */
+}
+
+/* 开始提示 */
+.game-start-overlay,
+.game-pause-overlay,
+.game-result-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 20;
+  animation: fadeIn 0.3s;
+}
+
+.start-panel,
+.pause-panel,
+.result-panel {
+  background-color: white;
+  border-radius: var(--border-radius-lg);
+  padding: 30px;
+  text-align: center;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: var(--shadow-lg);
+}
+
+.start-panel h2,
+.pause-panel h2,
+.result-panel h2 {
+  color: var(--primary-color);
+  font-size: 2rem;
+  margin-bottom: 15px;
+}
+
+.start-panel p,
+.result-panel p {
+  color: var(--text-color);
+  margin-bottom: 20px;
+}
+
+.start-button {
+  font-size: 1.5rem;
+  padding: 15px 30px;
+  margin-top: 20px;
+  width: 100%;
+}
+
+/* 胜利和失败面板 */
+.result-icon {
+  font-size: 4rem;
+  margin-bottom: 15px;
+}
+
+.result-panel.win {
+  border: 5px solid var(--success-color);
+}
+
+.result-panel.lose {
+  border: 5px solid var(--danger-color);
+}
+
+.result-panel.confirm {
+  border: 5px solid var(--secondary-color);
+}
+
+.result-buttons {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.result-buttons .btn {
+  flex: 1;
+  padding: 12px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* 响应式样式 */
+@media (max-width: 768px) {
+  .game-header {
+    padding: 10px;
+    flex-direction: column;
+    height: auto;
+  }
+  
+  .left-section,
+  .center-section,
+  .right-section {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 10px;
+  }
+  
+  .right-section {
+    align-items: center;
+  }
+  
+  .score-container {
+    width: 100%;
+    max-width: 300px;
+  }
+  
+  .target-letter-container {
+    margin-bottom: 20px;
+  }
+  
+  .target-letter {
+    font-size: 2.5rem;
+  }
+  
+  .game-area {
+    padding-top: 10px;
+  }
+  
+  .encouragement {
+    position: static;
+    margin-top: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .game-header {
+    padding: 5px;
+  }
+  
+  .target-letter-container {
+    padding: 8px 15px;
+  }
+  
+  .target-letter-label {
+    font-size: 1rem;
+    margin-right: 10px;
+  }
+  
+  .target-letter {
+    font-size: 2rem;
+  }
+  
+  .speak-button {
+    font-size: 1.5rem;
+    padding-left: 10px;
+  }
+  
+  .control-button {
+    padding: 6px 10px;
+    font-size: 0.9rem;
+  }
+  
+  .game-controls {
+    width: 100%;
+  }
+  
+  .control-button {
+    flex: 1;
+    text-align: center;
+  }
 }
 </style> 

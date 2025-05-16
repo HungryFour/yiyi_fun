@@ -219,6 +219,7 @@ function playSound(sound) {
   align-items: center;
   background: linear-gradient(135deg, #FFD3A5 0%, #FD6585 100%);
   padding: 20px;
+  overflow-y: auto;
 }
 
 .settings-container {
@@ -230,6 +231,7 @@ function playSound(sound) {
   box-shadow: var(--shadow-lg);
   position: relative;
   animation: slide-in 0.5s ease;
+  margin: 20px 0;
 }
 
 @keyframes slide-in {
@@ -262,6 +264,7 @@ function playSound(sound) {
   font-size: 1.1rem;
   position: absolute;
   left: 0;
+  z-index: 2;
 }
 
 .back-icon {
@@ -346,6 +349,8 @@ function playSound(sound) {
   display: flex;
   justify-content: space-around;
   margin-top: 15px;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .info-item {
@@ -355,6 +360,7 @@ function playSound(sound) {
   background-color: white;
   border-radius: var(--border-radius-sm);
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  min-width: 180px;
 }
 
 .info-icon {
@@ -477,10 +483,12 @@ function playSound(sound) {
   display: flex;
   justify-content: space-between;
   gap: 20px;
+  flex-wrap: wrap;
 }
 
 .setting-field {
   flex-grow: 1;
+  flex-basis: 200px;
   background-color: white;
   padding: 15px;
   border-radius: var(--border-radius-sm);
@@ -563,5 +571,94 @@ function playSound(sound) {
 
 .save-button:hover:before {
   transform: translateX(100%);
+}
+
+/* 响应式布局 */
+@media (max-width: 768px) {
+  .settings-view {
+    padding: 10px;
+    align-items: flex-start;
+  }
+  
+  .settings-container {
+    padding: 20px;
+    margin: 10px 0;
+  }
+  
+  .title {
+    font-size: 1.8rem;
+  }
+  
+  .back-text {
+    display: none;
+  }
+  
+  .back-icon {
+    font-size: 1.8rem;
+    margin-right: 0;
+  }
+  
+  .setting-title {
+    font-size: 1.3rem;
+  }
+  
+  .difficulty-buttons {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .difficulty-button {
+    padding: 10px;
+  }
+  
+  .difficulty-info {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .info-item {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .win-lose-settings {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .toggle-container {
+    flex-wrap: wrap;
+  }
+  
+  .toggle-slider {
+    margin-bottom: 10px;
+  }
+  
+  .save-button {
+    font-size: 1.2rem;
+    padding: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .settings-container {
+    padding: 15px;
+  }
+  
+  .setting-group {
+    padding: 15px;
+  }
+  
+  .title {
+    font-size: 1.5rem;
+  }
+  
+  .toggle-label {
+    font-size: 1rem;
+  }
+  
+  .setting-title:before {
+    display: none;
+  }
 }
 </style>

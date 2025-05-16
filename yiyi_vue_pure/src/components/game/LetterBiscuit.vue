@@ -43,9 +43,10 @@ const emit = defineEmits(['click'])
 
 // 计算样式
 const style = computed(() => {
+  // 考虑元素本身大小的一半进行居中显示
   return {
-    left: `${props.posX * 100}%`,
-    top: `${props.posY * 100}%`
+    left: `calc(${props.posX * 100}% - 45px)`,
+    top: `calc(${props.posY * 100}% - 45px)`
   }
 })
 
@@ -68,17 +69,48 @@ const handleClick = () => {
 <style scoped>
 .letter-biscuit {
   position: absolute;
-  width: 80px;
-  height: 80px;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background-color: #FFE0B2;
+  border: 5px solid #FFCC80;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-  transform-origin: center center;
-  transition: transform 0.1s;
-  transform: translate(-50%, -50%);
+  user-select: none;
+  transform: translateZ(0);
+  transition: all 0.2s;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 6; /* 提高z-index高于导航栏 */
+
+  /* 饼干纹理 */
+  background-image: radial-gradient(
+    circle at 30% 30%,
+    rgba(255, 255, 255, 0.2) 2px,
+    transparent 3px
+  ), radial-gradient(
+    circle at 70% 40%,
+    rgba(255, 255, 255, 0.2) 2px,
+    transparent 3px
+  ), radial-gradient(
+    circle at 40% 70%,
+    rgba(255, 255, 255, 0.2) 2px,
+    transparent 3px
+  ), radial-gradient(
+    circle at 20% 20%,
+    rgba(0, 0, 0, 0.05) 2px,
+    transparent 3px
+  ), radial-gradient(
+    circle at 60% 80%,
+    rgba(0, 0, 0, 0.05) 2px,
+    transparent 3px
+  );
 }
 
 .biscuit-inner {
-  width: 100%;
-  height: 100%;
+  width: 80%;
+  height: 80%;
   background-color: #FFE0B2;
   border-radius: 50%;
   display: flex;
@@ -118,11 +150,11 @@ const handleClick = () => {
 }
 
 .letter-biscuit:hover {
-  transform: translate(-50%, -50%) scale(1.1);
+  transform: scale(1.1);
 }
 
 .letter-biscuit:active {
-  transform: translate(-50%, -50%) scale(0.95);
+  transform: scale(0.95);
 }
 
 /* 目标字母提示样式 */
@@ -130,5 +162,28 @@ const handleClick = () => {
   background-color: #FFD54F;
   border-color: #FFB300;
   box-shadow: 0 0 15px #FFD54F;
+}
+
+/* 响应式样式 */
+@media (max-width: 768px) {
+  .letter-biscuit {
+    width: 70px;
+    height: 70px;
+  }
+  
+  .letter {
+    font-size: 28px;
+  }
+}
+
+@media (max-width: 480px) {
+  .letter-biscuit {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .letter {
+    font-size: 24px;
+  }
 }
 </style> 
