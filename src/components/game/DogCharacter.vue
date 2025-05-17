@@ -23,7 +23,7 @@
     <div class="speech-bubble" v-if="showSpeech">
       <span>{{ speechText }}</span>
     </div>
-    <div class="name-tag">{{ name || '小狗' }}</div>
+
   </div>
 </template>
 
@@ -81,10 +81,10 @@ function playHappyAnimation() {
   const dogCharacter = document.querySelector('.dog-character')
   
   gsap.to(dogCharacter, {
-    y: -20,
+    rotation: 5,
     duration: 0.3,
     yoyo: true,
-    repeat: 2,
+    repeat: 1,
     ease: "power1.inOut"
   })
 }
@@ -107,7 +107,7 @@ function playSadAnimation() {
 .dog-character-container {
   position: relative;
   width: 150px;
-  height: 180px;
+  height: 150px;
 }
 
 .dog-character {
@@ -115,7 +115,7 @@ function playSadAnimation() {
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 150px;
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -123,8 +123,8 @@ function playSadAnimation() {
 }
 
 .dog-image {
-  width: 140px;
-  height: 140px;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
   border-radius: 50%;
   border: 4px solid white;
@@ -135,14 +135,13 @@ function playSadAnimation() {
 /* 语音气泡 */
 .speech-bubble {
   position: absolute;
-  top: -60px;
-  left: 50%;
-  transform: translateX(-50%);
+  bottom: -80px;
+  width: 100%;
+  text-align: center;
   background-color: white;
   padding: 10px 15px;
   border-radius: 20px;
   min-width: 100px;
-  text-align: center;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
   animation: pop-in 0.3s;
 }
@@ -157,13 +156,14 @@ function playSadAnimation() {
   height: 0;
   border-left: 8px solid transparent;
   border-right: 8px solid transparent;
-  border-top: 8px solid white;
+  border-bottom: 8px solid white;
+  top: -8px;
 }
 
 @keyframes pop-in {
-  0% { transform: translateX(-50%) scale(0); }
-  70% { transform: translateX(-50%) scale(1.1); }
-  100% { transform: translateX(-50%) scale(1); }
+  0% { transform: scale(0); }
+  70% { transform: scale(1.1); }
+  100% { transform: scale(1); }
 }
 
 /* 名牌 */

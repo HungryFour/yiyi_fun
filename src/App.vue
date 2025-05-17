@@ -5,18 +5,11 @@
         <component :is="Component" />
       </transition>
     </router-view>
-    
-    <!-- 横屏提示 -->
-    <div class="rotate-device">
-      <div class="rotate-icon">↻</div>
-      <div class="rotate-text">请旋转设备至横屏模式</div>
-      <div class="rotate-desc">获得更好的游戏体验</div>
-    </div>
   </div>
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
+import { onMounted, onBeforeUnmount } from 'vue'
 import { useGameStore } from './stores/gameStore'
 
 const gameStore = useGameStore()
@@ -27,7 +20,38 @@ onMounted(() => {
   
   // 预加载音效
   preloadSounds()
+  
+  // 监听退出全屏事件
+  document.addEventListener('fullscreenchange', handleFullscreenChange)
+  document.addEventListener('webkitfullscreenchange', handleFullscreenChange)
+  document.addEventListener('mozfullscreenchange', handleFullscreenChange)
+  document.addEventListener('MSFullscreenChange', handleFullscreenChange)
 })
+
+onBeforeUnmount(() => {
+  // 移除全屏事件监听
+  document.removeEventListener('fullscreenchange', handleFullscreenChange)
+  document.removeEventListener('webkitfullscreenchange', handleFullscreenChange)
+  document.removeEventListener('mozfullscreenchange', handleFullscreenChange)
+  document.removeEventListener('MSFullscreenChange', handleFullscreenChange)
+})
+
+// 处理全屏状态改变
+function handleFullscreenChange() {
+  const isFullscreen = document.fullscreenElement || 
+                      document.webkitFullscreenElement || 
+                      document.mozFullScreenElement ||
+                      document.msFullscreenElement
+  
+  // 如果当前在游戏中且退出了全屏，可以自动重新请求全屏
+  if (!isFullscreen && gameStore.gameState.isPlaying && !gameStore.gameState.isPaused) {
+    // 可以选择自动重新进入全屏或者暂停游戏
+    // 这里选择暂停游戏
+    if (gameStore.gameState.isPlaying) {
+      gameStore.pauseGame()
+    }
+  }
+}
 
 // 预加载音效
 function preloadSounds() {
@@ -54,37 +78,5 @@ function preloadSounds() {
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
-}
-
-.rotate-device {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.rotate-icon {
-  font-size: 5rem;
-  margin-bottom: 20px;
-  animation: rotate 2s infinite linear;
-}
-
-.rotate-text {
-  font-size: 1.8rem;
-  font-weight: 700;
-  margin-bottom: 10px;
-}
-
-.rotate-desc {
-  font-size: 1.3rem;
-}
-
-@keyframes rotate {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
 }
 </style> 

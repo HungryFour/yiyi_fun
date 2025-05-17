@@ -15,24 +15,15 @@
       <div class="left-section">
         <!-- 小狗角色 -->
         <dog-character
-          :name="gameStore.playerName"
           :mood="dogMood"
           :speech-text="speechText"
         />
-      </div>
-      
-      <div class="center-section">
-        <div class="target-letter-container" v-if="gameStore.gameState.targetLetter">
-          <div class="target-letter-label">请点击:</div>
-          <div class="target-letter">{{ gameStore.gameState.targetLetter }}</div>
-          <button class="speak-button" @click="speakTargetLetter">
-            🔊
-          </button>
-        </div>
-        
         <div v-if="gameStore.gameState.encouragement" class="encouragement">
           {{ gameStore.gameState.encouragement }}
         </div>
+        <button class="speak-button" @click="speakTargetLetter">
+          <svg t="1747404403817" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1530" width="48" height="48"><path d="M393.707231 292.571429L343.13933 487.619048l46.955908 234.779541-97.523809-45.149912-66.82187-108.359788-21.671958-86.687831 66.82187-113.777778z" fill="#C0EAFF" p-id="1531"></path><path d="M451.499118 509.291005a104.747795 61.40388 90 1 0 122.80776 0 104.747795 61.40388 90 1 0-122.80776 0Z" fill="#C0EAFF" p-id="1532"></path><path d="M426.215168 781.996473c-3.611993 0-7.223986-1.805996-10.835979-3.611993l-117.389771-86.687831c-36.119929-23.477954-65.015873-57.791887-83.075838-99.329806-10.835979-25.283951-16.253968-52.373898-16.253968-81.269841s5.417989-55.985891 16.253968-81.269842c16.253968-41.537919 45.149912-74.045855 83.075838-97.523809l110.165785-77.657848c9.029982-5.417989 19.865961-3.611993 25.28395 3.611993 5.417989 9.029982 3.611993 19.865961-3.611993 25.28395L319.661376 361.199295c-32.507937 19.865961-55.985891 48.761905-70.433863 81.269841-9.029982 21.671958-14.447972 45.149912-14.447972 68.627866 0 23.477954 3.611993 45.149912 12.641976 66.821869 14.447972 34.313933 37.925926 63.209877 68.627866 83.075838l117.38977 86.687831c7.223986 5.417989 9.029982 18.059965 3.611993 25.28395 0 5.417989-5.417989 9.029982-10.835978 9.029983z" fill="#1F87DD" p-id="1533"></path><path d="M523.738977 830.758377c-108.359788 0-193.241623-140.867725-193.241623-317.855379S415.379189 193.241623 523.738977 193.241623c25.283951 0 50.567901 7.223986 74.045855 23.477954 9.029982 5.417989 10.835979 16.253968 5.41799 25.28395s-16.253968 10.835979-25.283951 5.41799c-18.059965-10.835979-34.313933-18.059965-54.179894-18.059965-84.881834 0-157.121693 130.031746-157.121693 281.73545S438.857143 794.638448 523.738977 794.638448s157.121693-130.031746 157.121693-281.73545c0-74.045855-16.253968-146.285714-46.955908-198.659612-5.417989-9.029982-1.805996-19.865961 7.223986-25.28395 9.029982-5.417989 19.865961-1.805996 25.28395 7.223986 32.507937 59.597884 50.567901 135.449735 50.567902 216.719576C718.786596 689.890653 633.904762 830.758377 523.738977 830.758377z" fill="#1F87DD" p-id="1534"></path><path d="M523.738977 646.546737c-48.761905 0-86.687831-59.597884-86.687831-133.643739S474.977072 379.259259 523.738977 379.259259s86.687831 59.597884 86.687831 133.643739-37.925926 133.643739-86.687831 133.643739z m0-232.973545c-23.477954 0-50.567901 39.731922-50.567901 97.52381s27.089947 97.52381 50.567901 97.523809 50.567901-39.731922 50.567901-97.523809-27.089947-97.52381-50.567901-97.52381z" fill="#1F87DD" p-id="1535"></path><path d="M523.738977 413.573192h-1.805996l-92.105821-10.835979c-9.029982-1.805996-16.253968-10.835979-16.253968-19.865961 1.805996-9.029982 10.835979-16.253968 19.865961-16.253968l92.105821 10.835979c9.029982 1.805996 16.253968 10.835979 16.253968 19.865961 0 9.029982-9.029982 16.253968-18.059965 16.253968zM372.035273 662.800705c-9.029982 0-16.253968-7.223986-18.059964-16.253968-1.805996-9.029982 5.417989-18.059965 16.253968-19.865961l153.5097-16.253968c9.029982-1.805996 18.059965 5.417989 19.865961 16.253968 1.805996 9.029982-5.417989 18.059965-16.253968 19.865961l-153.5097 16.253968h-1.805997z" fill="#1F87DD" p-id="1536"></path><path d="M763.936508 364.811287c-5.417989 0-9.029982-1.805996-12.641975-5.417989-7.223986-7.223986-7.223986-18.059965 0-25.283951l25.28395-25.28395c7.223986-7.223986 18.059965-7.223986 25.283951 0s7.223986 18.059965 0 25.28395L776.578483 359.393298c-3.611993 3.611993-9.029982 5.417989-12.641975 5.417989zM771.160494 720.592593c-5.417989 0-9.029982-1.805996-12.641975-5.41799l-25.283951-25.28395c-7.223986-7.223986-7.223986-18.059965 0-25.283951s18.059965-7.223986 25.283951 0l25.28395 25.283951c7.223986 7.223986 7.223986 18.059965 0 25.28395-3.611993 3.611993-7.223986 5.417989-12.641975 5.41799zM819.922399 529.156966h-54.179895c-10.835979 0-18.059965-7.223986-18.059964-18.059964s7.223986-18.059965 18.059964-18.059965h54.179895c10.835979 0 18.059965 7.223986 18.059964 18.059965s-9.029982 18.059965-18.059964 18.059964z" fill="#1F87DD" p-id="1537"></path></svg>
+        </button>
       </div>
       
       <div class="right-section">
@@ -50,7 +41,7 @@
         <!-- 倒计时条 -->
         <countdown-bar
           :current-time="gameStore.gameState.countdownTime"
-          :max-time="gameStore.gameState.maxCountdownTime"
+          :max-time="Number(gameStore.gameState.maxCountdownTime)"
         />
         
         <div class="game-controls">
@@ -76,6 +67,7 @@
         :show-hint="gameStore.settings.showTargetHint"
         :pos-x="letter.x"
         :pos-y="letter.y"
+        :shape="letter.shape"
         @click="handleLetterClick(letter)"
       />
     </div>
@@ -107,7 +99,16 @@
         <div class="result-icon">🏆</div>
         <h2>恭喜你赢了!</h2>
         <p>{{ gameStore.playerName ? `${gameStore.playerName}，` : '' }}你真棒!</p>
-        <p>得分: {{ gameStore.gameState.score }}</p>
+        <div class="result-stats">
+          <div class="stat-item">
+            <span class="stat-label">得分:</span>
+            <span class="stat-value">{{ gameStore.gameState.score }}</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">游戏时间:</span>
+            <span class="stat-value">{{ formattedGameTime }}</span>
+          </div>
+        </div>
         <div class="result-buttons">
           <button class="btn" @click="restartGame">再玩一次</button>
           <button class="btn btn-secondary" @click="exitGame">返回主菜单</button>
@@ -121,7 +122,16 @@
         <div class="result-icon">😢</div>
         <h2>游戏结束</h2>
         <p>别灰心，再试一次吧!</p>
-        <p>得分: {{ gameStore.gameState.score }}</p>
+        <div class="result-stats">
+          <div class="stat-item">
+            <span class="stat-label">得分:</span>
+            <span class="stat-value">{{ gameStore.gameState.score }}</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">游戏时间:</span>
+            <span class="stat-value">{{ formattedGameTime }}</span>
+          </div>
+        </div>
         <div class="result-buttons">
           <button class="btn" @click="restartGame">再玩一次</button>
           <button class="btn btn-secondary" @click="exitGame">返回主菜单</button>
@@ -135,21 +145,31 @@
         <h2>确定要退出游戏吗?</h2>
         <p>当前游戏进度将不会保存</p>
         <div class="result-buttons">
-          <button class="btn" @click="showExitConfirm = false">继续游戏</button>
+          <button class="btn" @click="cancelExit">继续游戏</button>
           <button class="btn btn-secondary" @click="exitGame">退出游戏</button>
         </div>
       </div>
     </div>
+    
+    <!-- 音量警告组件 -->
+    <VolumeWarning 
+      :show="showVolumeWarning" 
+      @close="showVolumeWarning = false"
+    />
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useGameStore } from '../../stores/gameStore'
 import LetterBiscuit from '../../components/game/LetterBiscuit.vue'
 import DogCharacter from '../../components/game/DogCharacter.vue'
 import CountdownBar from '../../components/ui/CountdownBar.vue'
+import VolumeWarning from '../../components/ui/VolumeWarning.vue'
+
+// 全局音频管理器 - 跟踪所有活跃的音频实例
+const activeAudios = ref([])
 
 const router = useRouter()
 const gameStore = useGameStore()
@@ -166,19 +186,47 @@ const lastFrameTime = ref(0)
 // 计算属性
 const isWin = computed(() => gameStore.isWin)
 const isGameOver = computed(() => gameStore.isGameOver)
+const formattedGameTime = computed(() => {
+  const totalSeconds = gameStore.gameState.totalGameTime
+  const minutes = Math.floor(totalSeconds / 60)
+  const seconds = totalSeconds % 60
+  return `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`
+})
+
+// 声明新的状态变量
+const lowVolumeDetected = ref(false)
+const showVolumeWarning = ref(false)
 
 // 生命周期钩子
 onMounted(() => {
   // 初始化游戏配置
   gameStore.initConfig()
   
+  // 重置状态确保每次进入游戏页面时都显示开始界面
+  gameStarted.value = false
+  showWinPanel.value = false
+  showLosePanel.value = false
+  showExitConfirm.value = false
+  
+  // 重置游戏状态
+  gameStore.resetGameState()
+  
   // 启动游戏循环
   requestAnimationFrame(gameLoop)
+  
+  // 自动进入全屏模式
+  requestFullscreen()
+  
+  // 检测音量
+  checkSystemVolume()
 })
 
 onBeforeUnmount(() => {
   // 清理
   cancelAnimationFrame(gameLoopId)
+  
+  // 停止所有声音
+  cancelSpeechAndAudio()
 })
 
 // 游戏循环
@@ -209,6 +257,74 @@ function checkGameStatus() {
   }
 }
 
+// 请求全屏
+function requestFullscreen() {
+  const elem = document.documentElement
+  if (elem.requestFullscreen) {
+    elem.requestFullscreen()
+  } else if (elem.webkitRequestFullscreen) { /* Safari */
+    elem.webkitRequestFullscreen()
+  } else if (elem.msRequestFullscreen) { /* IE11 */
+    elem.msRequestFullscreen()
+  }
+}
+
+// 检测系统音量 - 使用无声测试音频，不请求麦克风权限
+function checkSystemVolume() {
+  try {
+    // 尝试播放一个测试音频（静音）来检测系统是否允许播放声音
+    const testAudio = new Audio()
+    testAudio.volume = 0 // 静音播放
+    
+    // 添加音频状态监听器
+    testAudio.addEventListener('playing', () => {
+      // 播放成功，检查系统是否允许播放声音
+      console.log('音频测试成功，系统允许播放声音')
+      // 播放后立即停止
+      testAudio.pause()
+      testAudio.currentTime = 0
+    })
+    
+    testAudio.addEventListener('error', (e) => {
+      console.warn('音频测试失败:', e)
+      lowVolumeDetected.value = true
+      showVolumeWarning.value = true
+      speechText.value = "请确保音量已打开，否则你可能听不到字母哦！"
+      dogMood.value = "worried"
+      setTimeout(() => {
+        showVolumeWarning.value = false
+        speechText.value = ""
+        dogMood.value = "neutral"
+      }, 5000)
+    })
+    
+    // 尝试播放
+    const playPromise = testAudio.play()
+    
+    if (playPromise !== undefined) {
+      playPromise.catch(error => {
+        if (error.name === 'NotAllowedError') {
+          // 系统静音或禁止自动播放
+          lowVolumeDetected.value = true
+          showVolumeWarning.value = true
+          speechText.value = "请确保音量已打开，否则你可能听不到字母哦！"
+          dogMood.value = "worried"
+          setTimeout(() => {
+            showVolumeWarning.value = false
+            speechText.value = ""
+            dogMood.value = "neutral"
+          }, 5000)
+        }
+      })
+    }
+  } catch (e) {
+    console.error('音量检测失败:', e)
+    // 在测试失败的情况下，仍然提示用户
+    lowVolumeDetected.value = true
+    showVolumeWarning.value = true
+  }
+}
+
 // 开始游戏
 function startGame() {
   playSound('click')
@@ -218,29 +334,38 @@ function startGame() {
   
   // 开始游戏
   gameStarted.value = true
-  showWinPanel.value = false
-  showLosePanel.value = false
+  gameStore.gameState.isPlaying = true
   
   // 开始第一轮
   gameStore.startNewRound()
   
-  // 设置初始语音
-  if (gameStore.playerName) {
-    setSpeechText(`${gameStore.playerName}，准备好了吗？`)
+  // 检查是否能够播放声音
+  if (lowVolumeDetected.value) {
+    // 系统静音或音量太低，显示提示
+    showVolumeWarning.value = true
+    speechText.value = "请确保音量已打开，否则你可能听不到字母发音哦！"
+    dogMood.value = "worried"
+    setTimeout(() => {
+      showVolumeWarning.value = false
+      speechText.value = ""
+      dogMood.value = "neutral"
+    }, 5000)
   } else {
-    setSpeechText('准备好了吗？')
+    // 再次检测音量
+    checkSystemVolume()
   }
-  
-  // 自动朗读首个字母
-  setTimeout(() => {
-    speakTargetLetter()
-  }, 1000)
 }
 
 // 重新开始游戏
 function restartGame() {
   playSound('click')
   startGame()
+}
+
+// 取消退出
+function cancelExit() {
+  showExitConfirm.value = false
+  gameStore.resumeGame()
 }
 
 // 暂停/继续游戏
@@ -258,6 +383,7 @@ function togglePause() {
 function confirmExit() {
   // 如果游戏已经结束或未开始，直接退出
   if (!gameStarted.value || showWinPanel.value || showLosePanel.value) {
+    cancelSpeechAndAudio()
     exitGame()
   } else {
     // 正在游戏中，显示确认弹窗
@@ -269,6 +395,7 @@ function confirmExit() {
 // 退出游戏
 function exitGame() {
   playSound('click')
+  cancelSpeechAndAudio()
   router.push('/')
 }
 
@@ -298,10 +425,10 @@ function handleLetterClick(letter) {
     gameStore.checkLetter(letter)
   }
   
-  // 3秒后重置表情
+  // 1秒后重置表情
   setTimeout(() => {
     dogMood.value = 'neutral'
-  }, 3000)
+  }, 1000)
 }
 
 // 投喂动画
@@ -313,7 +440,15 @@ function feedLetter(letter) {
 // 朗读目标字母
 function speakTargetLetter() {
   if (gameStore.gameState.targetLetter) {
-    gameStore.speakLetter(gameStore.gameState.targetLetter)
+    // 先停止之前的所有语音，但使用setTimeout延迟执行，避免冲突
+    setTimeout(() => {
+      cancelSpeechAndAudio()
+      
+      // 再使用setTimeout延迟播放新语音
+      setTimeout(() => {
+        gameStore.speakLetter(gameStore.gameState.targetLetter)
+      }, 50)
+    }, 5)
   }
 }
 
@@ -346,11 +481,100 @@ function showGameOver() {
 // 播放音效
 function playSound(sound) {
   try {
-    const audio = new Audio(`/sounds/${sound}.mp3`)
-    audio.play().catch(err => console.error('无法播放音效', err))
+    // 标记当前正在处理音频，避免快速点击导致的冲突
+    const processingPlay = true
+    
+    // 创建音频元素前先取消之前的所有音频
+    // 但使用短暂延迟，避免音频操作的时序问题
+    setTimeout(() => {
+      try {
+        // 创建音频元素
+        const audio = new Audio(`/sounds/${sound}.mp3`)
+        
+        // 添加自定义标记，表示此音频正在准备播放
+        audio._pendingPlay = true
+        
+        // 添加到活跃音频列表
+        activeAudios.value.push(audio)
+        
+        // 当音频播放结束时，从列表中移除
+        audio.onended = () => {
+          const index = activeAudios.value.indexOf(audio)
+          if (index !== -1) {
+            activeAudios.value.splice(index, 1)
+          }
+          audio._pendingPlay = false
+        }
+        
+        // 设置音量
+        audio.volume = 1.0
+        
+        // 给浏览器一点时间准备
+        setTimeout(() => {
+          // 使用Promise包装播放并添加错误处理
+          const playPromise = audio.play()
+          
+          if (playPromise !== undefined) {
+            playPromise.then(() => {
+              // 成功播放后，移除pending标记
+              audio._pendingPlay = false
+            }).catch(err => {
+              console.error('无法播放音效', err)
+              // 如果播放失败，也从列表中移除
+              const index = activeAudios.value.indexOf(audio)
+              if (index !== -1) {
+                activeAudios.value.splice(index, 1)
+              }
+              audio._pendingPlay = false
+            })
+          } else {
+            // 如果没有返回promise，也要清除pending标记
+            audio._pendingPlay = false
+          }
+        }, 20)
+      } catch (e) {
+        console.error('创建音频元素失败:', e)
+      }
+    }, 10)
   } catch (e) {
     console.error('音效播放错误:', e)
   }
+}
+
+// 停止所有语音和音频
+function cancelSpeechAndAudio() {
+  // 停止语音合成
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.cancel()
+  }
+  
+  // 使用临时数组存储当前活跃的音频，防止修改过程中出现问题
+  const audiosToPause = [...activeAudios.value]
+  // 清空活跃音频列表
+  activeAudios.value = []
+  
+  // 延迟停止音频，避免与即将播放的音频冲突
+  setTimeout(() => {
+    // 停止所有活跃的音频元素
+    audiosToPause.forEach(audio => {
+      try {
+        // 避免直接pause，先检查音频状态
+        if (!audio.paused && !audio._pendingPlay) {
+          audio.pause()
+          audio.currentTime = 0
+        }
+      } catch (e) {
+        console.error('停止音频失败:', e)
+      }
+    })
+  }, 10)
+  
+  console.log('已停止所有声音')
+}
+
+// 原有的stopAllSounds方法改为调用新方法
+function stopAllSounds() {
+  cancelSpeechAndAudio()
 }
 </script>
 
@@ -474,13 +698,10 @@ function playSound(sound) {
   padding: 10px 20px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   z-index: 10;
-  flex-wrap: wrap;
 }
 
 .left-section {
-  display: flex;
-  align-items: center;
-  width: 180px;
+  position: relative;
 }
 
 .center-section {
@@ -497,7 +718,6 @@ function playSound(sound) {
   flex-direction: column;
   align-items: flex-end;
   gap: 10px;
-  min-width: 250px;
 }
 
 .game-controls {
@@ -519,6 +739,9 @@ function playSound(sound) {
   color: white;
 }
 
+.btn-secondary {
+  margin-left: 10px;
+}
 .back-button {
   background-color: var(--accent-color);
   color: white;
@@ -553,11 +776,14 @@ function playSound(sound) {
 }
 
 .speak-button {
+  position: absolute;
+  right: 0;
+  bottom: -5px;
   background: none;
   border: none;
   font-size: 1.8rem;
   cursor: pointer;
-  padding: 0 0 0 15px;
+  padding: 0;
   opacity: 0.7;
   transition: all 0.2s;
 }
@@ -575,14 +801,30 @@ function playSound(sound) {
 /* 鼓励信息 */
 .encouragement {
   position: absolute;
-  bottom: -30px;
-  background-color: rgba(255, 255, 255, 0.9);
+  bottom: -40px;
+  width: 100%;
+  text-align: center;
   color: var(--accent-color);
   font-weight: bold;
   padding: 5px 15px;
   border-radius: 20px;
   z-index: 10;
+  background-color: rgba(255, 255, 255, 0.9);
   animation: fadeInUp 0.3s;
+}
+
+.encouragement:after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 8px solid white;
+  top: -8px;
 }
 
 @keyframes fadeInUp {
@@ -631,6 +873,7 @@ function playSound(sound) {
   width: 100%;
   z-index: 5;
   padding-top: 20px; /* 确保与顶部导航栏有足够间距 */
+  overflow: hidden; /* 防止字母溢出 */
 }
 
 /* 开始提示 */
@@ -679,7 +922,7 @@ function playSound(sound) {
 .start-button {
   font-size: 1.5rem;
   padding: 15px 30px;
-  margin-top: 20px;
+  margin: 20px 0;
   width: 100%;
 }
 
@@ -717,84 +960,47 @@ function playSound(sound) {
   to { opacity: 1; }
 }
 
-/* 响应式样式 */
+/* 修改移动端的游戏头部样式 */
 @media (max-width: 768px) {
-  .game-header {
-    padding: 10px;
-    flex-direction: column;
-    height: auto;
-  }
   
-  .left-section,
-  .center-section,
-  .right-section {
-    width: 100%;
-    max-width: 100%;
-    margin-bottom: 10px;
+  .start-button {
+    margin-right: 20px;
   }
-  
-  .right-section {
-    align-items: center;
-  }
-  
-  .score-container {
-    width: 100%;
-    max-width: 300px;
-  }
-  
-  .target-letter-container {
-    margin-bottom: 20px;
-  }
-  
-  .target-letter {
-    font-size: 2.5rem;
-  }
-  
+  /* 移动端游戏区域样式 */
   .game-area {
-    padding-top: 10px;
+    padding-top: 5px;
+    min-height: 300px; /* 确保游戏区域在竖屏模式下有足够高度 */
+    height: 70vh; /* 增加游戏区域高度 */
+    position: relative;
+    border: 2px dashed rgba(0, 0, 0, 0.1); /* 游戏区域边界可视化 */
+    margin: 0 5px;
+    overflow: hidden;
   }
   
-  .encouragement {
-    position: static;
-    margin-top: 10px;
+  /* 优化竖屏布局 */
+  .game-view {
+    height: auto;
+    min-height: 100vh;
+  }
+  
+  .game-background {
+    position: fixed; /* 背景固定，确保在滚动时也能覆盖整个页面 */
   }
 }
 
+/* 小屏幕设备的额外游戏区域优化 */
 @media (max-width: 480px) {
-  .game-header {
-    padding: 5px;
+  .start-button {
+    margin-right: 20px;
   }
   
-  .target-letter-container {
-    padding: 8px 15px;
-  }
-  
-  .target-letter-label {
-    font-size: 1rem;
-    margin-right: 10px;
-  }
-  
-  .target-letter {
-    font-size: 2rem;
-  }
-  
-  .speak-button {
-    font-size: 1.5rem;
-    padding-left: 10px;
-  }
-  
-  .control-button {
-    padding: 6px 10px;
-    font-size: 0.9rem;
-  }
-  
-  .game-controls {
-    width: 100%;
-  }
-  
-  .control-button {
-    flex: 1;
-    text-align: center;
+  /* 竖屏下字母饼干布局优化 */
+  .game-area {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
+    height: 75vh; /* 在更小屏幕上进一步增加游戏区域高度 */
   }
 }
 </style> 

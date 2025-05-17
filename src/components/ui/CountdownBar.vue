@@ -1,6 +1,5 @@
 <template>
   <div class="countdown-container">
-    <div class="countdown-label">时间</div>
     <div class="countdown-bar">
       <div 
         class="countdown-progress"
@@ -28,7 +27,7 @@ const props = defineProps({
 
 // 计算百分比
 const percentage = computed(() => {
-  return (props.currentTime / props.maxTime) * 100
+  return (props.currentTime / Number(props.maxTime)) * 100
 })
 
 // 格式化时间
@@ -53,7 +52,7 @@ function formatTime(ms) {
 
 .countdown-bar {
   height: 16px;
-  width: 150px;
+  width: 8rem;
   background-color: #E0E0E0;
   border-radius: 8px;
   overflow: hidden;
