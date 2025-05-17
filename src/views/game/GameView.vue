@@ -358,6 +358,9 @@ function startGame() {
 
 // 重新开始游戏
 function restartGame() {
+  showWinPanel.value = false
+  showLosePanel.value = false
+  showExitConfirm.value = false
   playSound('click')
   startGame()
 }
